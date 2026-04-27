@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tamagotchi Dependiente</title>
+<link rel="manifest" href="manifest.json">
+<style>
+  body { margin:0; font-family: Arial; text-align:center; background:#111; color:#fff; }
+  #screen { height:60vh; display:flex; flex-direction:column; justify-content:center; align-items:center; }
+  #estado { font-size:60px; }
+  #mensaje { margin-top:10px; font-size:18px; opacity:0.8; }
+  #stats { margin-top:15px; font-size:14px; }
+</style>
+</head>
+<body>
+
+<div id="screen">
+  <div id="estado">😐</div>
+  <div id="mensaje">Interactuá conmigo...</div>
+  <div id="stats"></div>
+</div>
+
+<script>
+let felicidad = 50;
+let dependencia = 0;
+let vivo = true;
+let ultimaInteraccion = Date.now();
+
+function actualizarPantalla() {
+  if (!vivo) {
+    estado.innerText = "💀";
+    mensaje.innerText = "Me abandonaste...";
+    stats.innerText = "";
+    return;
+  }
+
+  let cara = "😐";
+  if (felicidad > 70) cara = "😄";
+  if (felicidad < 30) cara = "😢";
+  if (felicidad < 10) cara = "😫";
+
+  estado.innerText = cara;
+  stats.innerText = `Felicidad: ${felicidad} | Dependencia: ${dependencia}`;
+}
+
+function interactuar() {
+  if (!vivo) return;
+
+  felicidad += 5;
+  dependencia += 2;
+  ultimaInteraccion = Date.now();
+
+  mensaje.innerText = "Gracias por estar conmigo ❤️";
+  actualizarPantalla();
+}
+
+function pasoTiempo() {
+  if (!vivo) return;
+
+  let ahora = Date.now();
+  let inactivo = (ahora - ultimaInteraccion) / 1000;
+
+  // cuanto más dependiente, más rápido cae
+  felicidad -= 0.5 + (dependencia * 0.05);
+
+  if (inactivo > 5) {
+    mensaje.innerText = "¿Seguís ahí...?";
+  }
+  if (inactivo > 10) {
+    mensaje.innerText = "No me ignores...";
+    felicidad -= 2;
+  }
+  if (inactivo > 20) {
+    mensaje.innerText = "Por favor volvé...";
+    felicidad -= 5;
+  }
+
+  if (felicidad <= 0) {
+    vivo = false;
+  }
+
+  felicidad = Math.max(0, Math.min(100, felicidad));
+  actualizarPantalla();
+}
+
+// detectar interacción real del usuario
+window.addEventListener("touchstart", interactuar);
+window.addEventListener("click", interactuar);
+window.addEventListener("scroll", interactuar);
+
+setInterval(pasoTiempo, 1000);
+actualizarPantalla();
+
+// service worker (para PWA)
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+
+</body>
+</html>
