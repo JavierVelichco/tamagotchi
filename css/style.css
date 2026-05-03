@@ -1,0 +1,354 @@
+* {
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.container {
+    max-width: 500px;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+}
+
+.pet-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 40px;
+    padding: 30px 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    z-index: 1;
+}
+
+.emoji {
+    font-size: 120px;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+    transition: all 0.3s ease;
+    margin: 20px 0;
+}
+
+.message {
+    font-size: 18px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 12px;
+    border-radius: 50px;
+    margin: 15px 0;
+    font-weight: 500;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.stats {
+    text-align: left;
+    margin: 20px 0;
+}
+
+.stat-bar {
+    margin: 12px 0;
+}
+
+.stat-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-bottom: 5px;
+    opacity: 0.9;
+}
+
+.bar-bg {
+    background: rgba(255, 255, 255, 0.2);
+    height: 8px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    transition: width 0.3s ease;
+    border-radius: 10px;
+}
+
+.happiness-fill {
+    background: linear-gradient(90deg, #ff6b6b, #ffd93d);
+}
+
+.hunger-fill {
+    background: linear-gradient(90deg, #a8e6cf, #3b8d68);
+}
+
+.stats-numbers {
+    font-size: 12px;
+    text-align: center;
+    margin-top: 15px;
+    opacity: 0.7;
+}
+
+.warning {
+    background: rgba(255, 50, 50, 0.3);
+    border: 1px solid rgba(255, 50, 50, 0.5);
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.reset-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s;
+}
+
+.reset-btn:active {
+    transform: scale(0.95);
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+.shake {
+    animation: shake 0.3s ease;
+}
+
+.video-btn,
+.juego-btn {
+    background: #ff0000;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+    margin: 5px;
+}
+
+.juego-btn {
+    background: #4CAF50;
+}
+
+.video-btn:active,
+.juego-btn:active {
+    transform: scale(0.95);
+}
+
+/* Estilos del minijuego */
+.juego-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.juego-container {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-radius: 40px;
+    padding: 20px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+}
+
+.juego-titulo {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.juego-area {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    min-height: 300px;
+    position: relative;
+    margin: 20px 0;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.fantasma {
+    position: absolute;
+    font-size: 50px;
+    cursor: pointer;
+    animation: flotar 0.5s ease-in-out;
+    transition: transform 0.1s;
+}
+
+.fantasma:active {
+    transform: scale(0.9);
+}
+
+@keyframes flotar {
+    0% {
+        transform: translateY(0);
+        opacity: 0;
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.juego-puntuacion {
+    font-size: 20px;
+    margin: 10px 0;
+}
+
+.juego-tiempo {
+    font-size: 18px;
+    color: #ffaa00;
+}
+
+.btn-cerrar-juego {
+    background: #ff3366;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.contador-espera {
+    font-size: 14px;
+    color: #ffaa00;
+    margin-top: 10px;
+}
+
+/* Estilos para el sistema de voz */
+.voz-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 5px;
+    transition: transform 0.2s;
+}
+
+.voz-btn:hover {
+    transform: scale(1.05);
+}
+
+.voz-cancel-btn {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.voice-listening {
+    text-align: center;
+    padding: 20px;
+    background: rgba(0,0,0,0.8);
+    border-radius: 15px;
+    animation: pulse 1s infinite;
+}
+
+.voice-animation {
+    font-size: 30px;
+    margin: 10px 0;
+}
+
+.voice-wave {
+    display: inline-block;
+    animation: wave 0.5s ease-in-out infinite;
+    margin: 0 5px;
+}
+
+.voice-wave:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.voice-wave:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+@keyframes wave {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.cancel-voice-btn {
+    background: #ff4757;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* Permiso de micrófono */
+.microphone-permission {
+    background: rgba(0,0,0,0.9);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    margin: 10px;
+}

@@ -7,164 +7,9 @@
     <title>Dependiente - Tu mascota digital tóxica</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff3366">
-    <style>
-        * {
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-        }
-
-        .container {
-            max-width: 500px;
-            width: 100%;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .pet-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 40px;
-            padding: 30px 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .emoji {
-            font-size: 120px;
-            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
-            transition: all 0.3s ease;
-            margin: 20px 0;
-        }
-
-        .message {
-            font-size: 18px;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 12px;
-            border-radius: 50px;
-            margin: 15px 0;
-            font-weight: 500;
-            min-height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .stats {
-            text-align: left;
-            margin: 20px 0;
-        }
-
-        .stat-bar {
-            margin: 12px 0;
-        }
-
-        .stat-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            margin-bottom: 5px;
-            opacity: 0.9;
-        }
-
-        .bar-bg {
-            background: rgba(255, 255, 255, 0.2);
-            height: 8px;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .bar-fill {
-            height: 100%;
-            transition: width 0.3s ease;
-            border-radius: 10px;
-        }
-
-        .happiness-fill {
-            background: linear-gradient(90deg, #ff6b6b, #ffd93d);
-        }
-
-        .hunger-fill {
-            background: linear-gradient(90deg, #a8e6cf, #3b8d68);
-        }
-
-        .stats-numbers {
-            font-size: 12px;
-            text-align: center;
-            margin-top: 15px;
-            opacity: 0.7;
-        }
-
-        .warning {
-            background: rgba(255, 50, 50, 0.3);
-            border: 1px solid rgba(255, 50, 50, 0.5);
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.7;
-            }
-        }
-
-        .reset-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 14px;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.3s;
-        }
-
-        .reset-btn:active {
-            transform: scale(0.95);
-        }
-
-        .abandon-warning {
-            color: #ff6b6b;
-            font-weight: bold;
-            animation: pulse 0.5s infinite;
-        }
-
-        @keyframes shake {
-
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            25% {
-                transform: translateX(-5px);
-            }
-
-            75% {
-                transform: translateX(5px);
-            }
-        }
-
-        .shake {
-            animation: shake 0.3s ease;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Cargar API de YouTube -->
+    <script src="https://www.youtube.com/iframe_api"></script>
 </head>
 
 <body>
@@ -178,10 +23,10 @@
                 <div class="stat-bar">
                     <div class="stat-label">
                         <span>❤️ Felicidad</span>
-                        <span id="happinessValue">50%</span>
+                        <span id="happinessValue">70%</span>
                     </div>
                     <div class="bar-bg">
-                        <div class="bar-fill happiness-fill" id="happinessBar" style="width: 50%"></div>
+                        <div class="bar-fill happiness-fill" id="happinessBar" style="width: 70%"></div>
                     </div>
                 </div>
 
@@ -201,208 +46,55 @@
             </div>
 
             <button class="reset-btn" id="resetBtn">🔄 Revivir mascota</button>
+            <!--<button id="manualVoiceBtn" class="action-btn">🎤 HABLAR CON MASCOTA</button>-->
         </div>
     </div>
 
+    
+
+    <!-- MODAL PARA VIDEO (YouTube embebido) -->
+    <div id="videoModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; flex-direction: column;">
+        <div style="background: #000; width: 95%; max-width: 400px; border-radius: 20px; overflow: hidden;">
+            <div id="youtubePlayer" style="width: 100%; aspect-ratio: 16/9;"></div>
+            <div style="padding: 15px; text-align: center;">
+                <p id="videoStatus" style="color: white; margin: 0 0 10px 0;">🎬 Mira el video completo...</p>
+                <button id="closeVideoBtn" style="background: #ff3366; color: white; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer;">❌ Cerrar (sin recompensa)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts en el ORDEN CORRECTO -->
+    <!-- 1. Estado global PRIMERO -->
+    <script src="js/gameState.js"></script>
+    
+    <!-- 2. UI y utilidades -->
+    <script src="js/ui.js"></script>
+    
+    <!-- 3. Sistemas individuales -->
+    <script src="js/minigame.js"></script>
+    <script src="js/videoSystem.js"></script>
+    <script src="js/voiceSystem.js"></script>
+    
+    <!-- 4. Sistema de eventos aleatorios (OPCIONAL - solo si lo quieres usar) -->
+    <script src="js/eventSystem.js"></script>
+    
+    <!-- 5. Lógica principal -->
+    <script src="js/gameLoop.js"></script>
+    <script src="js/main.js"></script>
+    
+    <!-- Script para cerrar modal de video -->
     <script>
-        // Estado del juego
-        let gameState = {
-            happiness: 70,
-            addiction: 0,
-            isAlive: true,
-            lastInteraction: Date.now(),
-            abandonSeconds: 0
-        };
-
-        let intervalId = null;
-        let shakeTimeout = null;
-
-        // Mensajes según estado de felicidad
-        const messages = {
-            veryHappy: ["✨ ¡Me siento vivo! ✨", "🎉 Sigue tocándome... necesito más 🎉", "💫 Un poco más, dame atención 💫"],
-            happy: ["😊 Gracias por estar aquí", "📱 Me gusta cuando me usas", "🎮 Tócame otra vez... por favor"],
-            neutral: ["😐 ¿Sigues ahí?", "📱 Puedes darme más atención...", "🎯 Necesito que me toques"],
-            sad: ["😢 Me estás ignorando...", "💔 Por favor, no me dejes", "⚠️ Un poco más y me pondré triste"],
-            verySad: ["😭 ME ESTÁS MATANDO", "💀 TO CAMÉ POR FAVOR", "⚰️ Si no me tocas... moriré"],
-            dead: ["💀 He muerto por tu abandono...", "🪦 Revíveme si aún te importo", "😔 Demasiado tarde..."]
-        };
-
-        function getEmoji() {
-            if (!gameState.isAlive) return "💀";
-            if (gameState.happiness >= 80) return ["😍", "🥰", "😁"][Math.floor(Math.random() * 3)];
-            if (gameState.happiness >= 60) return ["😊", "🙂", "😌"][Math.floor(Math.random() * 3)];
-            if (gameState.happiness >= 40) return ["😐", "🤨", "😕"][Math.floor(Math.random() * 3)];
-            if (gameState.happiness >= 20) return ["😢", "😔", "😞"][Math.floor(Math.random() * 3)];
-            return ["😭", "😫", "💀"][Math.floor(Math.random() * 2)];
-        }
-
-        function getMessage() {
-            if (!gameState.isAlive) {
-                return messages.dead[Math.floor(Math.random() * messages.dead.length)];
+        // Configurar botón de cerrar video después de que todo cargue
+        document.addEventListener('DOMContentLoaded', function() {
+            const closeVideoBtn = document.getElementById('closeVideoBtn');
+            if (closeVideoBtn && typeof cerrarVideoModal === 'function') {
+                closeVideoBtn.onclick = function() {
+                    if (typeof cerrarVideoModal === 'function') {
+                        cerrarVideoModal();
+                    }
+                };
             }
-
-            if (gameState.happiness >= 80) return messages.veryHappy[Math.floor(Math.random() * messages.veryHappy.length)];
-            if (gameState.happiness >= 60) return messages.happy[Math.floor(Math.random() * messages.happy.length)];
-            if (gameState.happiness >= 40) return messages.neutral[Math.floor(Math.random() * messages.neutral.length)];
-            if (gameState.happiness >= 20) return messages.sad[Math.floor(Math.random() * messages.sad.length)];
-            return messages.verySad[Math.floor(Math.random() * messages.verySad.length)];
-        }
-
-        function updateUI() {
-            // Actualizar emoji
-            document.getElementById('emoji').textContent = getEmoji();
-
-            // Actualizar mensaje
-            document.getElementById('message').textContent = getMessage();
-
-            // Actualizar barras
-            const happinessPercent = (gameState.happiness / 100) * 100;
-            document.getElementById('happinessBar').style.width = `${happinessPercent}%`;
-            document.getElementById('happinessValue').textContent = `${Math.floor(gameState.happiness)}%`;
-
-            const addictionPercent = (gameState.addiction / 100) * 100;
-            document.getElementById('addictionBar').style.width = `${addictionPercent}%`;
-            document.getElementById('addictionValue').textContent = `${Math.floor(gameState.addiction)}%`;
-
-            document.getElementById('abandonTimer').textContent = gameState.abandonSeconds;
-
-            // Cambiar color del mensaje si está muy triste
-            const messageDiv = document.getElementById('message');
-            if (!gameState.isAlive) {
-                messageDiv.classList.add('warning');
-            } else if (gameState.happiness < 30) {
-                messageDiv.classList.add('warning');
-            } else {
-                messageDiv.classList.remove('warning');
-            }
-
-            // Hacer vibrar el emoji si está muy mal
-            const emojiDiv = document.getElementById('emoji');
-            if (gameState.happiness < 20 && gameState.isAlive) {
-                emojiDiv.classList.add('shake');
-                if (shakeTimeout) clearTimeout(shakeTimeout);
-                shakeTimeout = setTimeout(() => emojiDiv.classList.remove('shake'), 300);
-            }
-        }
-
-        function interact() {
-            if (!gameState.isAlive) return;
-
-            // Actualizar tiempo de última interacción
-            gameState.lastInteraction = Date.now();
-            gameState.abandonSeconds = 0;
-
-            // Aumentar felicidad (más si tiene mucha dependencia - es más "necesitado")
-            let happinessGain = 8 + (gameState.addiction * 0.15);
-            gameState.happiness = Math.min(100, gameState.happiness + happinessGain);
-
-            // Aumentar dependencia (cada vez necesita más atención)
-            gameState.addiction = Math.min(100, gameState.addiction + 2.5);
-
-            // Feedback háptico suave (si está disponible y no es muy intenso)
-            if (window.navigator && window.navigator.vibrate) {
-                window.navigator.vibrate(30);
-            }
-
-            updateUI();
-        }
-
-        function gameLoop() {
-            if (!gameState.isAlive) return;
-
-            const now = Date.now();
-            const secondsInactive = Math.floor((now - gameState.lastInteraction) / 1000);
-            gameState.abandonSeconds = secondsInactive;
-
-            // CALCULAR DECADENCIA - ¡LA CLAVE!
-            // Cuanto más dependiente es, más rápido pierde felicidad cuando lo ignoras
-            let decayRate = 0.3; // Base decay
-
-            // Añadir penalización por dependencia
-            decayRate += (gameState.addiction / 100) * 2.5; // hasta +2.5 por segundo
-
-            // Añadir penalización por inactividad prolongada
-            if (secondsInactive > 5) decayRate += 0.5;
-            if (secondsInactive > 15) decayRate += 1;
-            if (secondsInactive > 30) decayRate += 2;
-
-            // Aplicar decaimiento
-            gameState.happiness = Math.max(0, gameState.happiness - decayRate);
-
-            // Si la felicidad llega a 0 o lleva más de 45 segundos sin interacción, muere
-            if (gameState.happiness <= 0 || secondsInactive >= 45) {
-                gameState.isAlive = false;
-                gameState.happiness = 0;
-                updateUI();
-
-                // Vibrar al morir
-                if (window.navigator && window.navigator.vibrate) {
-                    window.navigator.vibrate([200, 100, 200]);
-                }
-                return;
-            }
-
-            // Mensajes especiales por inactividad
-            const messageDiv = document.getElementById('message');
-            if (secondsInactive >= 30) {
-                messageDiv.textContent = "😭 ¡NO SOPORTO MÁS! ¡TÓCAME YA! 😭";
-            } else if (secondsInactive >= 20) {
-                messageDiv.textContent = "⚠️ ME ESTOY MURIENDO... por favor ⚠️";
-            } else if (secondsInactive >= 10) {
-                messageDiv.textContent = "😢 ¿En serio me vas a ignorar tanto tiempo? 😢";
-            }
-
-            updateUI();
-        }
-
-        function resetGame() {
-            gameState = {
-                happiness: 70,
-                addiction: 0,
-                isAlive: true,
-                lastInteraction: Date.now(),
-                abandonSeconds: 0
-            };
-
-            // Reiniciar mensaje
-            document.getElementById('message').textContent = "🎉 ¡He renacido! No me abandones otra vez... 🎉";
-            updateUI();
-
-            // Feedback de vibración
-            if (window.navigator && window.navigator.vibrate) {
-                window.navigator.vibrate([100, 50, 100]);
-            }
-        }
-
-        // Configurar eventos de interacción (más completo)
-        const interactionEvents = ['click', 'touchstart', 'touchend', 'scroll', 'keydown'];
-        interactionEvents.forEach(event => {
-            window.addEventListener(event, () => {
-                if (gameState.isAlive) interact();
-            });
         });
-
-        // También interacción específica en el documento
-        document.body.addEventListener('touchstart', () => interact(), { passive: false });
-        document.body.addEventListener('click', () => interact());
-
-        // Botón de reset
-        document.getElementById('resetBtn').addEventListener('click', resetGame);
-
-        // Iniciar el loop del juego
-        intervalId = setInterval(() => gameLoop(), 1000);
-
-        // Actualizar UI inicial
-        updateUI();
-
-        // Prevenir gestos de zoom que puedan interferir
-        document.addEventListener('touchmove', (e) => {
-            if (e.target.closest('.container')) {
-                e.preventDefault();
-            }
-        }, { passive: false });
-
-        console.log('🎮 Tamagotchi Dependiente iniciado - ¡No lo abandones!');
     </script>
 </body>
 
