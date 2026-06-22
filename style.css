@@ -174,7 +174,7 @@ button {
   border-radius: 999px;
   padding: 15px 18px;
   color: #101014;
-  background: #f2eef2;
+  background: #25f4ee;
   font-weight: 700;
   font-size: 1rem;
 }
@@ -184,7 +184,7 @@ button:nth-child(2) {
 }
 
 button:nth-child(3) {
-  background: #ff8fa0;
+    background: #25f4ee;
 }
 
 .log h2 {
@@ -280,3 +280,21 @@ button:nth-child(3) {
   text-align: center;
  
 }
+
+.controls {
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+}
+.log {
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+}
+
+#oracleBtn {
+  margin-top: 10px;
+    background: #25f4ee !important;
+  color: #101014;
+}
+
