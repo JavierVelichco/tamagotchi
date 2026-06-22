@@ -2,100 +2,78 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Dependiente - Tu mascota digital tóxica</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#ff3366">
-    <link rel="stylesheet" href="css/style.css">
-    <!-- Cargar API de YouTube -->
-    <script src="https://www.youtube.com/iframe_api"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Feed Me</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+  <meta name="theme-color" content="#0b0b0f" />
 </head>
 
 <body>
+  <main class="app">
 
-    <div class="container">
-        <div class="pet-card">
-            <div class="emoji" id="emoji">😊</div>
-            <div class="message" id="message">🎮 Tócame o me pondré triste...</div>
 
-            <div class="stats">
-                <div class="stat-bar">
-                    <div class="stat-label">
-                        <span>❤️ Felicidad</span>
-                        <span id="happinessValue">70%</span>
-                    </div>
-                    <div class="bar-bg">
-                        <div class="bar-fill happiness-fill" id="happinessBar" style="width: 70%"></div>
-                    </div>
-                </div>
-
-                <div class="stat-bar">
-                    <div class="stat-label">
-                        <span>📱 Dependencia</span>
-                        <span id="addictionValue">0%</span>
-                    </div>
-                    <div class="bar-bg">
-                        <div class="bar-fill hunger-fill" id="addictionBar" style="width: 0%"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="stats-numbers">
-                ⏱️ Abandonado: <span id="abandonTimer">0</span> segundos
-            </div>
-
-            <button class="reset-btn" id="resetBtn">🔄 Revivir mascota</button>
-            <!--<button id="manualVoiceBtn" class="action-btn">🎤 HABLAR CON MASCOTA</button>-->
+    <section class="creature-card">
+      <div id="creature" class="creature calm">
+        <div class="glow"></div>
+        <div class="oracle-eye">
+          <img src="feedme.png" alt="Feed Me">
         </div>
-    </div>
+      </div>
 
-    
+      <div class="diagnosis">
+        <p id="mainMessage">No conozco el mundo. Sólo conozco tus señales.</p>
+      </div>
+    </section>
+    <section class="oracle-panel">
+      <h2>Oráculo</h2>
 
-    <!-- MODAL PARA VIDEO (YouTube embebido) -->
-    <div id="videoModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; flex-direction: column;">
-        <div style="background: #000; width: 95%; max-width: 400px; border-radius: 20px; overflow: hidden;">
-            <div id="youtubePlayer" style="width: 100%; aspect-ratio: 16/9;"></div>
-            <div style="padding: 15px; text-align: center;">
-                <p id="videoStatus" style="color: white; margin: 0 0 10px 0;">🎬 Mira el video completo...</p>
-                <button id="closeVideoBtn" style="background: #ff3366; color: white; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer;">❌ Cerrar (sin recompensa)</button>
-            </div>
-        </div>
-    </div>
+      <div id="oracleResult">
+        Todavía no dispongo de suficientes señales.
+      </div>
 
-    <!-- Scripts en el ORDEN CORRECTO -->
-    <!-- 1. Estado global PRIMERO -->
-    <script src="js/gameState.js"></script>
-    
-    <!-- 2. UI y utilidades -->
-    <script src="js/ui.js"></script>
-    
-    <!-- 3. Sistemas individuales -->
-    <script src="js/minigame.js"></script>
-    <script src="js/videoSystem.js"></script>
-    <script src="js/voiceSystem.js"></script>
-    
-    <!-- 4. Sistema de eventos aleatorios (OPCIONAL - solo si lo quieres usar) -->
-    <script src="js/eventSystem.js"></script>
-    
-    <!-- 5. Lógica principal -->
-    <script src="js/gameLoop.js"></script>
-    <script src="js/main.js"></script>
-    
-    <!-- Script para cerrar modal de video -->
-    <script>
-        // Configurar botón de cerrar video después de que todo cargue
-        document.addEventListener('DOMContentLoaded', function() {
-            const closeVideoBtn = document.getElementById('closeVideoBtn');
-            if (closeVideoBtn && typeof cerrarVideoModal === 'function') {
-                closeVideoBtn.onclick = function() {
-                    if (typeof cerrarVideoModal === 'function') {
-                        cerrarVideoModal();
-                    }
-                };
-            }
-        });
-    </script>
+      <button id="oracleBtn">
+        Consultar oráculo
+      </button>
+    </section>
+
+    <section class="panel">
+      <div class="metric">
+        <span>Última señal</span>
+        <strong id="lastSignal">0s</strong>
+      </div>
+      <div class="metric">
+        <span>Energía inferida</span>
+        <strong id="energy">--%</strong>
+      </div>
+      <div class="metric">
+        <span>Estado vital inferido</span>
+        <strong id="lifeState">desconocido</strong>
+      </div>
+      <div class="metric">
+        <span>Confianza del diagnóstico</span>
+        <strong id="confidence">--%</strong>
+      </div>
+      <div class="metric">
+        <span>Batería observada</span>
+        <strong id="battery">no disponible</strong>
+      </div>
+    </section>
+
+    <section class="controls">
+      <button id="touchBtn">Enviar señal</button>
+      <button id="silenceBtn">Simular ausencia</button>
+      <button id="resetBtn">Borrar memoria</button>
+    </section>
+
+    <section class="log">
+      <h2>Memoria de observaciones</h2>
+      <div id="memoryLog"></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
 </body>
 
 </html>

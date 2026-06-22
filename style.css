@@ -1,0 +1,277 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #0b0b0f;
+  --panel: #171720;
+  --text: #f2eef2;
+  --muted: #a9a1ad;
+  --line: rgba(255, 255, 255, 0.12);
+  --danger: #ff5f73;
+  --warn: #ffb84d;
+  --ok: #80ffb0;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, rgba(92, 60, 130, 0.35), transparent 35%),
+    radial-gradient(circle at bottom, rgba(130, 20, 45, 0.25), transparent 40%),
+    var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.app {
+  width: min(100%, 520px);
+  margin: 0 auto;
+  padding: 24px 18px 40px;
+}
+
+.top {
+  padding-top: 16px;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2.5rem, 12vw, 4.4rem);
+  line-height: 0.9;
+}
+
+#statusLine {
+  color: var(--muted);
+  min-height: 1.4em;
+}
+
+.creature-card,
+.panel,
+.log {
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: rgba(23, 23, 32, 0.72);
+  backdrop-filter: blur(14px);
+}
+
+.creature-card {
+  min-height: 330px;
+  display: grid;
+  place-items: center;
+  gap: 18px;
+}
+
+.creature {
+  position: relative;
+  width: 210px;
+  height: 210px;
+  display: grid;
+  place-items: center;
+}
+
+.glow {
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  filter: blur(28px);
+  opacity: 0.55;
+  background: var(--ok);
+  animation: pulse 3s infinite alternate;
+}
+
+.body {
+  position: relative;
+  width: 155px;
+  height: 175px;
+  border-radius: 48% 52% 44% 56% / 42% 40% 60% 58%;
+  background:
+    radial-gradient(circle at 35% 22%, rgba(255, 255, 255, 0.35), transparent 16%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.04));
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: inset 0 -30px 60px rgba(0, 0, 0, 0.28);
+  animation: float 4s ease-in-out infinite;
+}
+
+.eye {
+  position: absolute;
+  top: 62px;
+  width: 20px;
+  height: 32px;
+  border-radius: 50%;
+  background: #08080c;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.3);
+}
+
+.eye.left {
+  left: 45px;
+}
+
+.eye.right {
+  right: 45px;
+}
+
+.mouth {
+  position: absolute;
+  left: 50%;
+  top: 112px;
+  width: 42px;
+  height: 16px;
+  transform: translateX(-50%);
+  border-bottom: 4px solid #08080c;
+  border-radius: 0 0 50px 50px;
+}
+
+.diagnosis {
+  width: 100%;
+  color: var(--text);
+  text-align: center;
+  line-height: 1.45;
+}
+
+.panel {
+  display: grid;
+  gap: 10px;
+}
+
+.metric {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.metric:last-child {
+  border-bottom: 0;
+}
+
+.metric span {
+  color: var(--muted);
+}
+
+.metric strong {
+  text-align: right;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+button {
+  border: 0;
+  border-radius: 999px;
+  padding: 15px 18px;
+  color: #101014;
+  background: #f2eef2;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+button:nth-child(2) {
+  background: #ffcf7a;
+}
+
+button:nth-child(3) {
+  background: #ff8fa0;
+}
+
+.log h2 {
+  margin-top: 0;
+  font-size: 1rem;
+}
+
+.memory-item {
+  border-left: 2px solid rgba(255, 255, 255, 0.25);
+  padding-left: 12px;
+  margin: 12px 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.creature.calm .glow {
+  background: var(--ok);
+}
+
+.creature.alert .glow {
+  background: var(--warn);
+}
+
+.creature.critical .glow {
+  background: var(--danger);
+}
+
+.creature.alert .body {
+  animation: float 2s ease-in-out infinite, tremble 0.18s infinite;
+}
+
+.creature.critical .body {
+  animation: tremble 0.08s infinite;
+}
+
+.creature.critical .mouth {
+  width: 24px;
+  height: 28px;
+  border: 4px solid #08080c;
+  border-radius: 50%;
+}
+
+@keyframes float {
+  from {
+    transform: translateY(-4px);
+  }
+
+  to {
+    transform: translateY(6px);
+  }
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(0.92);
+    opacity: 0.35;
+  }
+
+  to {
+    transform: scale(1.08);
+    opacity: 0.75;
+  }
+}
+
+@keyframes tremble {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(2px, -1px);
+  }
+
+  100% {
+    transform: translate(-2px, 1px);
+  }
+}
+
+.oracle-eye {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.oracle-eye img {
+  width: 180px;
+  height: auto;
+  display: block;
+  border-radius: 24px;
+}
