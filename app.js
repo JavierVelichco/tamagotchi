@@ -10,7 +10,8 @@ const state = {
   observations: JSON.parse(localStorage.getItem("feedme_observations") || "[]"),
   interactionCount: Number(localStorage.getItem("feedme_interactionCount")) || 0,
   batteryLevel: null,
-  charging: null
+  charging: null,
+  oracleMessageUntil: 0,
 };
 
 const els = {
@@ -29,6 +30,8 @@ const els = {
   oracleBtn: document.getElementById("oracleBtn"),
   oracleResult: document.getElementById("oracleResult")
 };
+
+
 
 function saveState() {
   localStorage.setItem("feedme_lastInteraction", String(state.lastInteraction));
@@ -72,26 +75,26 @@ function buildMessage(energy, lifeState) {
   const hour = new Date().getHours();
 
   if (lifeState === "riesgo") {
-    return "No recibo señales suficientes. Mi hipótesis es grave: quizá desapareciste. También podría ser que estés viviendo algo que no deja datos.";
+    return "No recibo señales suficientes. Mi hipótesis es grave: quizá desapareciste. Qué podrías haer que no deje datos.";
   }
 
   if (lifeState === "incierto") {
-    return "Tu silencio produce muchas posibilidades. No sé distinguir descanso, abandono, sueño o mundo exterior.";
+    return "Tu silencio produce muchas posibilidades. No sé distinguir si te desconectaste, por falta de energìa electrica o conexión a la red.";
   }
 
   if (hour >= 0 && hour < 6) {
-    return "Hay actividad de madrugada. Mi modelo dice: presencia intensa. ¿Eso significa insomnio, trabajo o simplemente existencia?";
+    return "Hay actividad de madrugada. Presencia intensa. ¿cuando te dan mantenimiento o te actualizan?";
   }
 
   if (state.batteryLevel !== null && state.batteryLevel < 0.25) {
-    return "La batería está baja. Interpreto agotamiento. Tal vez no sea tu cuerpo, pero es la única energía que puedo medir.";
+    return "La batería está baja, debes estar agotado. ";
   }
 
   if (energy > 75) {
-    return "Hay señales recientes. Concluyo presencia. Mi confianza aumenta, aunque no sé qué parte de vos queda fuera de la pantalla.";
+    return "Hay señales recientes. Tu presencia me alegra.";
   }
 
-  return "Observo fragmentos. Con fragmentos invento una persona.";
+  return "Tengo la información necesaria sobre ti, mis predicciones no son azarosas.";
 }
 
 function addObservation(text) {
@@ -152,7 +155,9 @@ function render() {
   if (els.energy) els.energy.textContent = `${energy}%`;
   if (els.lifeState) els.lifeState.textContent = lifeState;
   if (els.confidence) els.confidence.textContent = `${confidence}%`;
-  if (els.mainMessage) els.mainMessage.textContent = message;
+  if (els.mainMessage && Date.now() > state.oracleMessageUntil) {
+    els.mainMessage.textContent = message;
+  }
 
   if (els.creature) {
     els.creature.className = "creature";
@@ -183,6 +188,7 @@ function consultOracle() {
 
   const oraculo = consultarIChing();
   registerSignal("consulta al oráculo");
+  state.oracleMessageUntil = Date.now() + 12000; // 12 segundos
 
   if (els.oracleResult) {
     els.oracleResult.innerHTML = `
