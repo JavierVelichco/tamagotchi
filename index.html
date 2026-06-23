@@ -13,63 +13,71 @@
 <body>
   <main class="app">
 
-
     <section class="creature-card">
+      <svg class="electric-bg" viewBox="0 0 700 300" aria-hidden="true">
+        <polyline id="electricLine" points=""></polyline>
+        <polyline id="branchOne" points=""></polyline>
+        <polyline id="branchTwo" points=""></polyline>
+      </svg>
       <div id="creature" class="creature calm">
+
         <div class="glow"></div>
+
         <div class="oracle-eye">
           <img src="feedme.png" alt="Feed Me">
         </div>
-      </div>
 
-      <div class="diagnosis">
-        <p id="mainMessage">No conozco el mundo. Sólo conozco tus señales.</p>
       </div>
     </section>
+
+    <div class="diagnosis">
+      <p id="mainMessage">No conozco el mundo. Sólo conozco tus señales.</p>
+    </div>
+
     <section class="oracle-panel">
-      <h2>Oráculo</h2>
 
-      <div id="oracleResult">
-        Todavía no dispongo de suficientes señales.
-        
-      </div>
-    
-
-     <button id="oracleBtn">
+      <button id="oracleBtn">
         Consultar oráculo
       </button>
     </section>
 
-    <section class="panel">
+    <details class="panel observations">
+      <summary>Observaciones</summary>
+
       <div class="metric">
         <span>Última señal</span>
         <strong id="lastSignal">0s</strong>
       </div>
+
       <div class="metric">
         <span>Energía inferida</span>
         <strong id="energy">--%</strong>
       </div>
+
       <div class="metric">
         <span>Estado vital inferido</span>
         <strong id="lifeState">desconocido</strong>
       </div>
+
       <div class="metric">
         <span>Confianza del diagnóstico</span>
         <strong id="confidence">--%</strong>
       </div>
+
       <div class="metric">
         <span>Batería observada</span>
         <strong id="battery">no disponible</strong>
       </div>
-    </section>
 
-   <section class="controls">
+    </details>
+
+    <section class="controls">
       <button id="touchBtn">Enviar señal</button>
       <button id="silenceBtn">Simular ausencia</button>
       <button id="resetBtn">Borrar memoria</button>
     </section>
 
-   <section class="log">
+    <section class="log">
       <h2>Memoria de observaciones</h2>
       <div id="memoryLog"></div>
     </section>

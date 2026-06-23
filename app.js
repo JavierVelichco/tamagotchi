@@ -253,3 +253,73 @@ setInterval(() => {
     addObservation("El silencio persiste. Mi modelo no sabe diferenciar ausencia de vida fuera del teléfono.");
   }
 }, 1000);
+
+
+const electricSvg = document.querySelector(".electric-bg");
+const electricLine = document.getElementById("electricLine");
+const branchOne = document.getElementById("branchOne");
+const branchTwo = document.getElementById("branchTwo");
+
+function generarRayo() {
+  if (!electricSvg || !electricLine) return;
+
+  const puntos = [];
+
+  const ancho = randomEntre(300, 700);
+  const segmentos = Math.floor(randomEntre(15, 35));
+
+  for (let i = 0; i <= segmentos; i++) {
+
+    const x = -100 + ((900) / segmentos) * i;
+
+    const y =
+      150 +
+      (Math.random() * 120 - 60);
+
+    puntos.push(`${x},${y}`);
+  }
+
+  const puntoRama1 = puntos[Math.floor(puntos.length * 0.35)];
+  const puntoRama2 = puntos[Math.floor(puntos.length * 0.65)];
+
+  branchOne.setAttribute("points", generarRama(puntoRama1, -1));
+  branchTwo.setAttribute("points", generarRama(puntoRama2, 1));
+
+  electricLine.setAttribute("points", puntos.join(" "));
+
+  electricSvg.classList.remove("active");
+
+  setTimeout(() => {
+    electricSvg.classList.add("active");
+  }, 20);
+}
+
+function generarRama(puntoBase, direccion) {
+  const [xBase, yBase] = puntoBase.split(",").map(Number);
+  const rama = [];
+  const segmentos = 5;
+
+  for (let i = 0; i <= segmentos; i++) {
+    const x = xBase + i * 18;
+    const y = yBase + direccion * i * 18 + (Math.random() * 20 - 10);
+
+    rama.push(`${x},${y}`);
+  }
+
+  return rama.join(" ");
+}
+
+function randomEntre(min, max) {
+  return min + Math.random() * (max - min);
+}
+
+function activarRayosRandom() {
+  console.log("nuevo rayo");
+  generarRayo();
+
+  const espera = 2500 + Math.random() * 5500;
+
+  setTimeout(activarRayosRandom, espera);
+}
+
+activarRayosRandom();
