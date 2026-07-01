@@ -28,7 +28,11 @@ const els = {
   silenceBtn: document.getElementById("silenceBtn"),
   resetBtn: document.getElementById("resetBtn"),
   oracleBtn: document.getElementById("oracleBtn"),
-  oracleResult: document.getElementById("oracleResult")
+  oracleResult: document.getElementById("oracleResult"),
+  oracleQuestion: document.getElementById("oracleQuestion"),
+  qrWrap: document.getElementById("qrWrap"),
+  qrCode: document.getElementById("qrCode"),
+  qrPayload: document.getElementById("qrPayload")
 };
 
 
@@ -180,26 +184,89 @@ function render() {
   }
 }
 
-function consultOracle() {
-  if (typeof consultarIChing !== "function") {
-    if (els.oracleResult) els.oracleResult.textContent = "El archivo iching.js no está cargado.";
+function buildOraclePayload() {
+  const energy = inferEnergy();
+  const lifeState = classifyLifeState(energy);
+
+  return {
+    obra: "Feed Me",
+    tipo: "consulta_oraculo",
+    version: 1,
+    fecha: new Date().toISOString(),
+    pregunta: (els.oracleQuestion?.value || "").trim(),
+    senales: {
+      segundosDesdeUltimaSenal: secondsSinceLastSignal(),
+      energiaInferida: energy,
+      estadoVitalInferido: lifeState,
+      confianzaDiagnostico: inferConfidence(),
+      cantidadInteracciones: state.interactionCount,
+      bateria: state.batteryLevel === null ? "no disponible" : Math.round(state.batteryLevel * 100),
+      cargando: state.charging === null ? "no disponible" : state.charging,
+      horaLocal: new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }),
+    },
+    memoriaReciente: state.observations.slice(0, 5),
+    instruccionParaLLM:
+      "Respondé como el oráculo de Feed Me. Interpretá la pregunta usando las señales del teléfono. No digas que sos una IA. Devolvé una respuesta breve, poética e inquietante."
+  };
+}
+
+function generateOracleQR() {
+  const payload = buildOraclePayload();
+
+  if (!payload.pregunta) {
+    if (els.mainMessage) {
+      els.mainMessage.textContent =
+        "Antes de consultar, necesito una pregunta. Sin pregunta sólo tengo señales sueltas.";
+    }
     return;
   }
 
-  const oraculo = consultarIChing();
-  registerSignal("consulta al oráculo");
-  state.oracleMessageUntil = Date.now() + 12000; // 12 segundos
+  registerSignal("generación de QR para el oráculo");
 
-  if (els.oracleResult) {
-    els.oracleResult.innerHTML = `
-      <p><strong>${oraculo.simbolo} ${oraculo.nombre}</strong></p>
-      <p><em>${oraculo.clave}</em></p>
-      <p>${oraculo.respuesta}</p>
-    `;
+  const qrData = {
+    p: payload.pregunta,
+    e: payload.senales.energiaInferida,
+    v: payload.senales.estadoVitalInferido[0],
+    c: payload.senales.confianzaDiagnostico,
+    b: payload.senales.bateria,
+    g: payload.senales.cargando ? 1 : 0,
+    i: payload.senales.cantidadInteracciones,
+    s: payload.senales.segundosDesdeUltimaSenal
+  };
+
+  const qrText = JSON.stringify(qrData);
+
+  if (els.qrPayload) {
+    els.qrPayload.textContent = JSON.stringify(qrData, null, 2);
   }
 
+  if (els.qrWrap) {
+    els.qrWrap.hidden = false;
+  }
+
+  if (!els.qrCode) return;
+
+  els.qrCode.innerHTML = "";
+
+  if (typeof QRCode === "undefined") {
+    els.qrCode.innerHTML =
+      "<p>No se cargó la librería QRCode.</p>";
+    return;
+  }
+
+  console.log("QR:", qrText);
+  console.log("LONGITUD:", qrText.length);
+
+  new QRCode(els.qrCode, {
+    text: qrText,
+    width: 320,
+    height: 320,
+    correctLevel: QRCode.CorrectLevel.L
+  });
+
   if (els.mainMessage) {
-    els.mainMessage.textContent = oraculo.respuesta;
+    els.mainMessage.textContent =
+      "Convertí tus señales en un cuerpo legible. Ahora el oráculo puede leerlas.";
   }
 }
 
@@ -236,10 +303,12 @@ window.addEventListener("focus", () => registerSignal("la ventana recuperó foco
 if (els.touchBtn) els.touchBtn.addEventListener("click", () => registerSignal("toque voluntario"));
 if (els.silenceBtn) els.silenceBtn.addEventListener("click", simulateAbsence);
 if (els.resetBtn) els.resetBtn.addEventListener("click", resetMemory);
-if (els.oracleBtn) els.oracleBtn.addEventListener("click", consultOracle);
+if (els.oracleBtn) els.oracleBtn.addEventListener("click", generateOracleQR);
 
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js");
+  navigator.serviceWorker.getRegistrations().then(registrations => {
+    registrations.forEach(registration => registration.unregister());
+  });
 }
 
 setupBattery();

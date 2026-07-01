@@ -35,10 +35,21 @@
     </div>
 
     <section class="oracle-panel">
+      <label class="question-label" for="oracleQuestion">Pregunta para el oráculo</label>
+      <textarea id="oracleQuestion" rows="3" placeholder="Escribí tu pregunta..."></textarea>
 
       <button id="oracleBtn">
-        Consultar oráculo
+        Generar QR para el oráculo
       </button>
+
+      <div id="qrWrap" class="qr-wrap" hidden>
+        <p class="qr-title">Mostrale este QR al oráculo</p>
+        <div id="qrCode"></div>
+        <details class="payload-preview">
+          <summary>Ver datos enviados</summary>
+          <pre id="qrPayload"></pre>
+        </details>
+      </div>
     </section>
 
     <details class="panel observations">
@@ -83,6 +94,7 @@
     </section>
   </main>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="iching.js"></script>
   <script src="app.js"></script>
 </body>

@@ -350,3 +350,67 @@ button:nth-child(3) {
   background: #25f4ee !important;
   color: #101014;
 }
+
+.question-label {
+  display: block;
+  margin: 8px 0 8px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+#oracleQuestion {
+  width: 100%;
+  resize: vertical;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  font: inherit;
+  outline: none;
+}
+
+#oracleQuestion::placeholder {
+  color: var(--muted);
+}
+
+.qr-wrap {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.qr-title {
+  margin: 0 0 12px;
+  color: var(--text);
+  font-weight: 700;
+}
+
+#qrCode {
+  display: grid;
+  place-items: center;
+  padding: 14px;
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+.payload-preview {
+  margin-top: 12px;
+  color: var(--muted);
+  text-align: left;
+}
+
+#qrPayload {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 220px;
+  overflow: auto;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--text);
+  font-size: 0.78rem;
+}
