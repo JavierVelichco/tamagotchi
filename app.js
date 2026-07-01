@@ -213,6 +213,11 @@ function buildOraclePayload() {
 function generateOracleQR() {
   const payload = buildOraclePayload();
 
+  if (payload.pregunta.length > 120) {
+  alert("Las preguntas demasiado largas llegan fragmentadas al Oráculo.");
+  return;
+}
+
   if (!payload.pregunta) {
     if (els.mainMessage) {
       els.mainMessage.textContent =
@@ -224,7 +229,7 @@ function generateOracleQR() {
   registerSignal("generación de QR para el oráculo");
 
   const qrData = {
-    p: payload.pregunta,
+    p: payload.pregunta.substring(0, 120),
     e: payload.senales.energiaInferida,
     v: payload.senales.estadoVitalInferido[0],
     c: payload.senales.confianzaDiagnostico,
@@ -259,8 +264,8 @@ function generateOracleQR() {
 
   new QRCode(els.qrCode, {
     text: qrText,
-    width: 320,
-    height: 320,
+    width: 300,
+    height: 300,
     correctLevel: QRCode.CorrectLevel.L
   });
 
