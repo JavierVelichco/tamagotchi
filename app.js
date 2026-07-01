@@ -264,8 +264,8 @@ function generateOracleQR() {
 
   new QRCode(els.qrCode, {
     text: qrText,
-    width: 300,
-    height: 300,
+    width: 280,
+    height: 280,
     correctLevel: QRCode.CorrectLevel.L
   });
 
