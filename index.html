@@ -39,15 +39,34 @@
     </div>
 
     <section class="oracle-panel">
-      <label class="question-label" for="oracleQuestion">Pregunta para el oráculo</label>
-      <textarea id="oracleQuestion" rows="3" placeholder="Escribí tu pregunta..."></textarea>
+      <p class="question-label oracle-instruction">
+        Elegí una carta. Esa será tu consulta.
+      </p>
+      <button id="scanCardBtn" type="button">Escanear carta</button>
 
-      <button id="oracleBtn">
-        Generar QR para el oráculo
+      <div id="cardScanner" class="card-scanner" hidden>
+        <div class="camera-stage">
+          <video id="cardVideo" playsinline muted></video>
+          <div class="scan-guide" aria-hidden="true">
+            <span>XX</span>
+            <span>XXXXXXXXXX</span>
+          </div>
+          <p id="scanStatus" class="scan-status scan-status-overlay">Alineá el número y el nombre de la carta dentro del
+            recuadro.</p>
+        </div>
+        <canvas id="cardCanvas" hidden></canvas>
+        <div class="scanner-actions">
+          <button id="captureCardBtn" type="button">Leer carta</button>
+          <button id="stopScanBtn" type="button" class="secondary-btn">Cancelar</button>
+        </div>
+      </div>
+
+      <button id="oracleBtn" hidden>
+        Carta captada. Generar QR para el Oráculo
       </button>
 
       <div id="qrWrap" class="qr-wrap" hidden>
-        <p class="qr-title">Mostrale este QR al oráculo</p>
+        <p class="qr-title">ACERCÁ EL TELÉFONO AL ORÁCULO</p>
         <div id="qrCode"></div>
         <details class="payload-preview">
           <summary>Ver datos enviados</summary>
@@ -57,33 +76,37 @@
     </section>
 
     <details class="panel observations">
-      <summary>Observaciones</summary>
+      <summary>Rastros observados</summary>
 
       <div class="metric">
-        <span>Última señal</span>
+        <span>Última interacción</span>
         <strong id="lastSignal">0s</strong>
       </div>
 
       <div class="metric">
-        <span>Energía inferida</span>
-        <strong id="energy">--%</strong>
-      </div>
-
-      <div class="metric">
-        <span>Estado vital inferido</span>
-        <strong id="lifeState">desconocido</strong>
-      </div>
-
-      <div class="metric">
-        <span>Confianza del diagnóstico</span>
-        <strong id="confidence">--%</strong>
-      </div>
-
-      <div class="metric">
-        <span>Batería observada</span>
+        <span>Batería</span>
         <strong id="battery">no disponible</strong>
       </div>
 
+      <div class="metric">
+        <span>Pantalla</span>
+        <strong id="screenInfo">--</strong>
+      </div>
+
+      <div class="metric">
+        <span>Procesadores disponibles</span>
+        <strong id="processors">--</strong>
+      </div>
+
+      <div class="metric">
+        <span>Conexión</span>
+        <strong id="networkInfo">--</strong>
+      </div>
+
+      <div class="metric">
+        <span>Interacciones registradas</span>
+        <strong id="interactionMetric">0</strong>
+      </div>
     </details>
 
     <section class="controls">
@@ -99,7 +122,7 @@
   </main>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="iching.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script src="app.js"></script>
 </body>
 

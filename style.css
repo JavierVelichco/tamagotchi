@@ -359,22 +359,6 @@ button:nth-child(3) {
   text-align: left;
 }
 
-#oracleQuestion {
-  width: 100%;
-  resize: vertical;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 14px;
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text);
-  font: inherit;
-  outline: none;
-}
-
-#oracleQuestion::placeholder {
-  color: var(--muted);
-}
-
 .qr-wrap {
   margin-top: 18px;
   padding: 16px;
@@ -413,4 +397,117 @@ button:nth-child(3) {
   background: rgba(0, 0, 0, 0.3);
   color: var(--text);
   font-size: 0.78rem;
+}
+
+/* --- Escáner de cartas --- */
+
+.oracle-panel {
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: rgba(23, 23, 32, 0.72);
+  display: grid;
+  gap: 12px;
+}
+
+.question-label {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.card-scanner {
+  display: grid;
+  gap: 10px;
+}
+
+.card-scanner[hidden] {
+  display: none !important;
+}
+
+.camera-stage {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #000;
+  aspect-ratio: 4 / 3;
+}
+
+#cardVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.scan-guide {
+  position: absolute;
+
+  /* Ventana pequeña para leer solamente el encabezado */
+  left: 5%;
+  top: 5%;
+  width: 52%;
+  height: 32%;
+
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  gap: 4px;
+  padding: 10px;
+
+  color: rgba(255, 255, 255, 0.8);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  pointer-events: none;
+  text-shadow: 0 1px 3px #000;
+}
+
+.scan-guide span:last-child {
+  letter-spacing: 0.08em;
+}
+
+.scan-status {
+  margin: 0;
+  color: #ffffff;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.scan-status-overlay {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 7%;
+  z-index: 2;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  text-align: center;
+  text-shadow: 0 1px 3px #000;
+  pointer-events: none;
+}
+
+.scanner-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.secondary-btn {
+  background: #d7d0da;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.oracle-instruction {
+  width: 100%;
+  text-align: center;
 }

@@ -1,12 +1,11 @@
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open("feedme-v2").then(cache => {
+    caches.open("feedme-v3").then(cache => {
       return cache.addAll([
         "./",
         "./index.html",
         "./style.css",
         "./app.js",
-        "./iching.js",
         "./manifest.json",
         "./feedme.png"
       ]);
