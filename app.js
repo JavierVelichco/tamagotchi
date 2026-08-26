@@ -30,6 +30,7 @@ const els = {
   silenceBtn: document.getElementById("silenceBtn"),
   resetBtn: document.getElementById("resetBtn"),
   oracleBtn: document.getElementById("oracleBtn"),
+  clearQrBtn: document.getElementById("clearQrBtn"),
   oracleResult: document.getElementById("oracleResult"),
   qrWrap: document.getElementById("qrWrap"),
   qrCode: document.getElementById("qrCode"),
@@ -131,7 +132,7 @@ function identifyCardFromOCR(rawText) {
 
       for (const word of words) {
         if (Math.abs(word.length - normalizedAlias.length) <= tolerance &&
-            textDistance(word, normalizedAlias) <= tolerance) {
+          textDistance(word, normalizedAlias) <= tolerance) {
           return confirmCard(card, "nombre aproximado");
         }
       }
@@ -309,7 +310,7 @@ async function captureAndRecognizeCard() {
   }
   // SOLO PARA DIAGNÓSTICO:
   // muestra exactamente la imagen que recibe Tesseract
-  els.cardCanvas.hidden = false;
+  //els.cardCanvas.hidden = false;
 
   if (els.scanStatus) els.scanStatus.textContent = "Leyendo encabezado…";
   if (els.captureCardBtn) els.captureCardBtn.disabled = true;
@@ -626,6 +627,37 @@ function generateOracleQR() {
     els.mainMessage.textContent =
       "Convertí tus señales en un cuerpo legible. Ahora el oráculo puede leerlas.";
   }
+  if (els.oracleBtn) {
+    els.oracleBtn.hidden = true;
+  }
+
+  if (els.clearQrBtn) {
+    els.clearQrBtn.hidden = false;
+  }
+
+
+}
+
+function clearOracleQR() {
+  if (els.qrCode) {
+    els.qrCode.innerHTML = "";
+  }
+
+  if (els.qrWrap) {
+    els.qrWrap.hidden = true;
+  }
+
+  if (els.qrPayload) {
+    els.qrPayload.textContent = "";
+  }
+
+  if (els.oracleBtn) {
+    els.oracleBtn.hidden = false;
+  }
+
+  if (els.clearQrBtn) {
+    els.clearQrBtn.hidden = true;
+  }
 }
 
 async function setupBattery() {
@@ -662,9 +694,13 @@ if (els.touchBtn) els.touchBtn.addEventListener("click", () => registerSignal("t
 if (els.silenceBtn) els.silenceBtn.addEventListener("click", simulateAbsence);
 if (els.resetBtn) els.resetBtn.addEventListener("click", resetMemory);
 if (els.oracleBtn) els.oracleBtn.addEventListener("click", generateOracleQR);
+if (els.clearQrBtn) {
+  els.clearQrBtn.addEventListener("click", clearOracleQR);
+}
 if (els.scanCardBtn) els.scanCardBtn.addEventListener("click", startCardScanner);
 if (els.stopScanBtn) els.stopScanBtn.addEventListener("click", stopCardScanner);
 if (els.captureCardBtn) els.captureCardBtn.addEventListener("click", captureAndRecognizeCard);
+
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.getRegistrations().then(registrations => {
