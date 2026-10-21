@@ -1,6 +1,6 @@
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open("feedme-v3").then(cache => {
+    caches.open("feedme-v4-vistas-exclusivas").then(cache => {
       return cache.addAll([
         "./",
         "./index.html",

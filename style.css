@@ -511,3 +511,55 @@ button:nth-child(3) {
   width: 100%;
   text-align: center;
 }
+/* Pantallas exclusivas de escaneo y QR: sin superposición con Feed Me. */
+body.feedme-view-open { overflow: hidden; }
+body.feedme-view-open > main.app { display: none; }
+.feedme-full-view[hidden] { display: none !important; }
+.feedme-full-view {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: #0b0b0f;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+#scannerFullView .card-scanner {
+  width: min(100%, 520px);
+  min-height: 0;
+}
+#scannerFullView .camera-stage {
+  aspect-ratio: 4 / 3;
+  max-height: calc(100dvh - 110px);
+}
+#scannerFullView .scanner-actions button { min-width: 0; }
+#qrFullView .qr-wrap {
+  width: min(100%, 520px);
+  margin: 0;
+  text-align: center;
+  padding: 12px;
+}
+#qrFullView .qr-title { white-space: normal; overflow-wrap: anywhere; }
+#qrFullView #qrCode { width: fit-content; max-width: 100%; margin: auto; padding: 10px; }
+#qrFullView #qrCode img, #qrFullView #qrCode canvas {
+  display: block;
+  max-width: min(280px, calc(100vw - 72px), calc(100dvh - 190px));
+  height: auto !important;
+  aspect-ratio: 1;
+}
+#qrFullView #clearQrBtn {
+  width: min(100%, 480px);
+  margin-top: 12px;
+  flex-shrink: 0;
+}
+@media (max-height: 500px) {
+  .feedme-full-view { justify-content: flex-start; }
+  #scannerFullView .camera-stage { max-height: calc(100dvh - 95px); }
+}

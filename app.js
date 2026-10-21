@@ -174,6 +174,7 @@ async function startCardScanner() {
     }
 
     if (els.cardScanner) els.cardScanner.hidden = false;
+    mostrarVistaExclusiva("scanner");
     if (els.scanStatus) els.scanStatus.textContent = "Alineá el número y el nombre de la carta dentro del recuadro.";
   } catch (error) {
     console.error("No se pudo abrir la cámara", error);
@@ -188,6 +189,7 @@ function stopCardScanner() {
   }
   if (els.cardVideo) els.cardVideo.srcObject = null;
   if (els.cardScanner) els.cardScanner.hidden = true;
+  mostrarVistaExclusiva(null);
 }
 
 function drawPreparedOCRFrame(video, canvas) {
@@ -601,6 +603,7 @@ function generateOracleQR() {
 
   if (els.qrWrap) {
     els.qrWrap.hidden = false;
+    mostrarVistaExclusiva("qr");
   }
 
   if (!els.qrCode) return;
@@ -645,6 +648,7 @@ function clearOracleQR() {
 
   if (els.qrWrap) {
     els.qrWrap.hidden = true;
+    mostrarVistaExclusiva(null);
   }
 
   if (els.qrPayload) {
@@ -693,6 +697,32 @@ window.addEventListener("focus", () => registerSignal("la ventana recuperó foco
 if (els.touchBtn) els.touchBtn.addEventListener("click", () => registerSignal("toque voluntario"));
 if (els.silenceBtn) els.silenceBtn.addEventListener("click", simulateAbsence);
 if (els.resetBtn) els.resetBtn.addEventListener("click", resetMemory);
+// Presentación exclusiva: se reutilizan los elementos originales sin cambiar su lógica.
+function prepararVistasExclusivas() {
+  const scannerView = document.createElement("section");
+  scannerView.id = "scannerFullView";
+  scannerView.className = "feedme-full-view";
+  scannerView.hidden = true;
+  scannerView.setAttribute("aria-label", "Escanear carta");
+  document.body.appendChild(scannerView);
+  scannerView.appendChild(els.cardScanner);
+
+  const qrView = document.createElement("section");
+  qrView.id = "qrFullView";
+  qrView.className = "feedme-full-view";
+  qrView.hidden = true;
+  qrView.setAttribute("aria-label", "Código QR para el Oráculo");
+  document.body.appendChild(qrView);
+  qrView.appendChild(els.qrWrap);
+  qrView.appendChild(els.clearQrBtn);
+}
+function mostrarVistaExclusiva(tipo) {
+  document.getElementById("scannerFullView").hidden = tipo !== "scanner";
+  document.getElementById("qrFullView").hidden = tipo !== "qr";
+  document.body.classList.toggle("feedme-view-open", Boolean(tipo));
+}
+prepararVistasExclusivas();
+
 if (els.oracleBtn) els.oracleBtn.addEventListener("click", generateOracleQR);
 if (els.clearQrBtn) {
   els.clearQrBtn.addEventListener("click", clearOracleQR);
